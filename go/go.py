@@ -3,8 +3,6 @@ from pygame import *
 import sys
 import os
 
-# test
-
 pygame.init()
 
 # settings
