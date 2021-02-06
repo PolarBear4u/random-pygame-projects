@@ -240,11 +240,13 @@ class Main:
                 screen.blit(font_32.render(
                     str(i), True, c_description), (x, y))
 
-    def stone_clicked(self, x, y, color):
+    def stone_clicked(self, x, y, color, admin):
         for row in self.board:
             for area in row:
                 if area.touch(x, y):
-                    area.set_color(color)
+                    if not area.is_stone() or admin:
+                        area.set_color(color)
+                    
 
     def test_stones(self):
         for row in self.board:
@@ -332,13 +334,13 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                main.stone_clicked(mouse_x, mouse_y, c_stone_black)
+                main.stone_clicked(mouse_x, mouse_y, c_stone_black, False)
             elif event.button == 2:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                main.stone_clicked(mouse_x, mouse_y, None)
+                main.stone_clicked(mouse_x, mouse_y, None, True)
             elif event.button == 3:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                main.stone_clicked(mouse_x, mouse_y, c_stone_white)
+                main.stone_clicked(mouse_x, mouse_y, c_stone_white, False)
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_u:
