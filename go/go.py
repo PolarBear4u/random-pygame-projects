@@ -49,6 +49,7 @@ class Area:
         self.height = self.width
 
         self.neighbors = list()
+        self.previous = list()
 
     def draw_black(self):
 
@@ -94,7 +95,9 @@ class Area:
         if not self.is_stone():
             return False
         count = 0
+        self.previous = [self]
         for neighbor in self.neighbors:
+
             count += 1
             if neighbor is None:
                 if count == 4:
@@ -104,43 +107,46 @@ class Area:
                 return False
             else:
                 if neighbor.my_color() == self.color:
-                    if neighbor.dead_sup(self) and count == 4:
-                        return True
+                    if neighbor.dead_sup(self.previous):
+                        if count == 4:
+                            return True
+                        continue
                     else:
-                        if neighbor.dead_sup(self):
-                            continue
-                        else:
-                            return False
+                        return False
                 else:
                     if count == 4:
                         return True
+                    continue
 
-    def dead_sup(self, previous):  # TODO: fix infinite recursion
+    def dead_sup(self, previous):
+        self.previous = previous
         count = 0
         for neighbor in self.neighbors:
             count += 1
-            if neighbor is previous:
-                if count == 4:
-                    return True
-                continue
-            elif neighbor is None:
+            if neighbor is None:
                 if count == 4:
                     return True
                 continue
             elif not neighbor.is_stone():
                 return False
+            elif neighbor in self.previous:
+                if count == 4:
+                    return True
+                continue
             else:
                 if neighbor.my_color() == self.color:
-                    if neighbor.dead_sup(self) and count == 4:
-                        return True
+                    self.previous.append(self)
+                    if neighbor.dead_sup(self.previous):
+                        if count == 4:
+                            return True
+
+                        continue
                     else:
-                        if neighbor.dead_sup(self):
-                            continue
-                        else:
-                            return False
+                        return False
                 else:
                     if count == 4:
                         return True
+                    continue
 
     def receive_neighbors(self, neighbors):
         self.neighbors = neighbors
@@ -171,7 +177,8 @@ class Main:
                              (i, WIDTH - board_edge), line_width)
 
         self.orientation_points()
-        self.board_description(description_top, description_bot, description_left, description_right)
+        self.board_description(
+            description_top, description_bot, description_left, description_right)
 
     def build_board_list(self):
         for y in range(board_edge, WIDTH - board_edge + 1, (WIDTH - board_edge) // (lines + 1)):
@@ -247,8 +254,8 @@ class Main:
         self.board[7][4].draw_white()
 
     def give_neightbors(self):
-        for y in range(0, len(self.board) - 1):
-            for x in range(0, len(self.board[0]) - 1):
+        for y in range(0, len(self.board)):
+            for x in range(0, len(self.board[0])):
                 neighbors = list()
                 for i in range(4):
                     try:
@@ -306,7 +313,8 @@ def resource_path(relative_path):
 
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("go || Erxuan || i, j, k, l --> toggle description || left --> black ; right --> white ; mid --> del")
+pygame.display.set_caption(
+    "go || Erxuan || i, j, k, l --> toggle description || left --> black ; right --> white ; mid --> del")
 background_image = pygame.image.load(resource_path("oak_texture.jpg"))
 clock = pygame.time.Clock()
 
