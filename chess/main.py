@@ -1,7 +1,9 @@
 import pygame
 from pygame import *
 
+
 pygame.init()
+
 
 fps = 60
 
@@ -22,7 +24,7 @@ light_blue = (153, 255, 255)
 light_blue_2 = (204, 255, 255)
 orange = (255, 178, 102)
 
-c_background = black
+c_background = red
 c_black = black
 c_white = white
 c_board_black = blue
