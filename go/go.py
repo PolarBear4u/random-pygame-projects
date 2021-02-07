@@ -348,8 +348,11 @@ while running:
                 main.stone_clicked(mouse_x, mouse_y, c_stone_white, False)
 
         elif event.type == pygame.KEYDOWN:
+            # testing
             if event.key == pygame.K_u:
                 print(main.test_dead())
+
+            # description
             elif event.key == pygame.K_i:
                 description_top = not description_top
             elif event.key == pygame.K_j:
@@ -358,6 +361,8 @@ while running:
                 description_bot = not description_bot
             elif event.key == pygame.K_l:
                 description_right = not description_right
+
+            # reset
             elif event.key == pygame.K_r:
                 main.reset_all()
 
