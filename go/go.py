@@ -301,6 +301,11 @@ class Main:
     def test_dead(self):
         return self.board[0][0].dead()
 
+    def reset_all(self):
+        for row in self.board:
+            for area in row:
+                area.res_color()
+
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -353,6 +358,8 @@ while running:
                 description_bot = not description_bot
             elif event.key == pygame.K_l:
                 description_right = not description_right
+            elif event.key == pygame.K_r:
+                main.reset_all()
 
     main.remove_dead()
     pygame.display.update()
